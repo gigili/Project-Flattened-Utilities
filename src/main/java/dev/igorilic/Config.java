@@ -14,6 +14,8 @@ public class Config {
     static final ForgeConfigSpec SPEC;
 
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> SPAWN_HOUSE_WHITELIST;
+    public static final ForgeConfigSpec.IntValue MIN_HOUSE_DISTANCE;
+    public static final ForgeConfigSpec.IntValue PREVIEW_TIMEOUT_SECONDS;
 
     static {
         BUILDER.push("Permissions");
@@ -31,6 +33,14 @@ public class Config {
                                 return false;
                             }
                         });
+
+        MIN_HOUSE_DISTANCE = BUILDER
+                .comment("Minimum distance in blocks required between player houses")
+                .defineInRange("minHouseDistance", 1000, 1, 10000);
+
+        PREVIEW_TIMEOUT_SECONDS = BUILDER
+                .comment("How long the preview outline should be visible (in seconds)")
+                .defineInRange("previewTimeoutSeconds", 30, 1, 300);
 
         BUILDER.pop();
 

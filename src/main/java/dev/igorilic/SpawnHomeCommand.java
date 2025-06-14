@@ -131,7 +131,6 @@ public class SpawnHomeCommand {
 
             BlockPos.MutableBlockPos checkPos = new BlockPos.MutableBlockPos();
 
-            outer:
             for (int dx = 0; dx < size.getX(); dx++) {
                 for (int dy = 0; dy < size.getY(); dy++) {
                     for (int dz = 0; dz < size.getZ(); dz++) {
