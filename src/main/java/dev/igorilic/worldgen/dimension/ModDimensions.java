@@ -22,11 +22,11 @@ import java.util.OptionalLong;
 
 public class ModDimensions {
     public static final ResourceKey<LevelStem> PFDIM_KEY = ResourceKey.create(Registries.LEVEL_STEM,
-            new ResourceLocation(projectflattenedutilities.MODID, "pfdim"));
+            ResourceLocation.fromNamespaceAndPath(projectflattenedutilities.MOD_ID, "pfdim"));
     public static final ResourceKey<Level> PFDIM_LEVEL_KEY = ResourceKey.create(Registries.DIMENSION,
-            new ResourceLocation(projectflattenedutilities.MODID, "pfdim"));
+            ResourceLocation.fromNamespaceAndPath(projectflattenedutilities.MOD_ID, "pfdim"));
     public static final ResourceKey<DimensionType> PF_DIM_TYPE = ResourceKey.create(Registries.DIMENSION_TYPE,
-            new ResourceLocation(projectflattenedutilities.MODID, "pfdim_type"));
+            ResourceLocation.fromNamespaceAndPath(projectflattenedutilities.MOD_ID, "pfdim_type"));
 
 
     public static void bootstrapType(BootstapContext<DimensionType> context) {

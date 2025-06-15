@@ -17,6 +17,6 @@ public class ModWorldGenProvider extends DatapackBuiltinEntriesProvider {
             .add(Registries.LEVEL_STEM, ModDimensions::bootstrapStem);
 
     public ModWorldGenProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super(output, registries, BUILDER, Set.of(projectflattenedutilities.MODID));
+        super(output, registries, BUILDER, Set.of(projectflattenedutilities.MOD_ID));
     }
 }

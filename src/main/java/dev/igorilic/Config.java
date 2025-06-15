@@ -8,7 +8,7 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 import java.util.List;
 import java.util.UUID;
 
-@Mod.EventBusSubscriber(modid = projectflattenedutilities.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = projectflattenedutilities.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Config {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
     static final ForgeConfigSpec SPEC;
