@@ -1,6 +1,6 @@
 package dev.igorilic.worldgen.dimension;
 
-import dev.igorilic.projectflattenedutilities;
+import dev.igorilic.Pfu;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
@@ -22,11 +22,11 @@ import java.util.OptionalLong;
 
 public class ModDimensions {
     public static final ResourceKey<LevelStem> PFDIM_KEY = ResourceKey.create(Registries.LEVEL_STEM,
-            ResourceLocation.fromNamespaceAndPath(projectflattenedutilities.MOD_ID, "pfdim"));
+            ResourceLocation.fromNamespaceAndPath(Pfu.MOD_ID, "pfdim"));
     public static final ResourceKey<Level> PFDIM_LEVEL_KEY = ResourceKey.create(Registries.DIMENSION,
-            ResourceLocation.fromNamespaceAndPath(projectflattenedutilities.MOD_ID, "pfdim"));
+            ResourceLocation.fromNamespaceAndPath(Pfu.MOD_ID, "pfdim"));
     public static final ResourceKey<DimensionType> PF_DIM_TYPE = ResourceKey.create(Registries.DIMENSION_TYPE,
-            ResourceLocation.fromNamespaceAndPath(projectflattenedutilities.MOD_ID, "pfdim_type"));
+            ResourceLocation.fromNamespaceAndPath(Pfu.MOD_ID, "pfdim_type"));
 
 
     public static void bootstrapType(BootstapContext<DimensionType> context) {

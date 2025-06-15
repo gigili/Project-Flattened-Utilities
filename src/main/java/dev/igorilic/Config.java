@@ -8,12 +8,14 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 import java.util.List;
 import java.util.UUID;
 
-@Mod.EventBusSubscriber(modid = projectflattenedutilities.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = Pfu.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Config {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
     static final ForgeConfigSpec SPEC;
 
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> SPAWN_HOUSE_WHITELIST;
+    public static final ForgeConfigSpec.BooleanValue REQUIRES_ITEM_TO_TELEPORT;
+    public static final ForgeConfigSpec.ConfigValue<String> REQUIRED_ITEM_TO_TELEPORT;
 
     static {
         BUILDER.push("Permissions");
@@ -31,6 +33,14 @@ public class Config {
                                 return false;
                             }
                         });
+
+        REQUIRES_ITEM_TO_TELEPORT = BUILDER
+                .comment("If a player needs to hold an item in order to use the Teleporter")
+                .define("requireItemToTeleport", false);
+
+        REQUIRED_ITEM_TO_TELEPORT = BUILDER
+                .comment("Item that needs to be held in order for the teleporter to work")
+                .define("requiredItemToTeleport", "minecraft:stone_pickaxe");
 
         BUILDER.pop();
 
