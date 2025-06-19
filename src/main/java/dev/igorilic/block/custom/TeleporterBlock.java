@@ -14,6 +14,9 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -21,9 +24,16 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class TeleporterBlock extends Block {
     private static final Logger LOGGER = LogManager.getLogger();
+
+    private boolean requiresItem = false;
+    private Item requiredItem = null;
 
     public TeleporterBlock(Properties pProperties) {
         super(pProperties);
@@ -63,6 +73,9 @@ public class TeleporterBlock extends Block {
                 return InteractionResult.CONSUME;
             }
 
+            this.requiresItem = true;
+            this.requiredItem = requiredItem;
+
             boolean hasItemInHand = pPlayer.getMainHandItem().is(requiredItem) || pPlayer.getOffhandItem().is(requiredItem);
 
             if (!hasItemInHand) {
@@ -92,5 +105,13 @@ public class TeleporterBlock extends Block {
                 }
             }
         }
+    }
+
+    @Override
+    public void appendHoverText(@NotNull ItemStack pStack, @Nullable BlockGetter pLevel, @NotNull List<Component> pTooltip, @NotNull TooltipFlag pFlag) {
+        if (this.requiresItem) {
+            pTooltip.add(Component.literal("You need to hold a " + requiredItem.getDescription().getString() + " in your hand to teleport"));
+        }
+        super.appendHoverText(pStack, pLevel, pTooltip, pFlag);
     }
 }

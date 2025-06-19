@@ -1,8 +1,8 @@
 package dev.igorilic.block;
 
-import dev.igorilic.Pfu;
 import dev.igorilic.block.custom.TeleporterBlock;
 import dev.igorilic.item.ModItems;
+import dev.igorilic.projectflattenedutilities;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 
 public class ModBlocks {
 
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Pfu.MOD_ID);
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, projectflattenedutilities.MOD_ID);
 
     public static final RegistryObject<Block> TELEPORTER_BLOCK = registerBlock(
             "teleporter_block",

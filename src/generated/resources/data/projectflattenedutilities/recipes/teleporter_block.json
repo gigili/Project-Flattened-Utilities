@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "item": "minecraft:grass_block"
+    },
+    "O": {
+      "item": "minecraft:obsidian"
+    }
+  },
+  "pattern": [
+    "OOO",
+    "OGO",
+    "OOO"
+  ],
+  "result": {
+    "item": "projectflattenedutilities:teleporter_block"
+  },
+  "show_notification": true
+}

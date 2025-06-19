@@ -1,6 +1,6 @@
 package dev.igorilic.datagen;
 
-import dev.igorilic.Pfu;
+import dev.igorilic.projectflattenedutilities;
 import dev.igorilic.worldgen.dimension.ModDimensions;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistrySetBuilder;
@@ -17,6 +17,6 @@ public class ModWorldGenProvider extends DatapackBuiltinEntriesProvider {
             .add(Registries.LEVEL_STEM, ModDimensions::bootstrapStem);
 
     public ModWorldGenProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super(output, registries, BUILDER, Set.of(Pfu.MOD_ID));
+        super(output, registries, BUILDER, Set.of(projectflattenedutilities.MOD_ID));
     }
 }
