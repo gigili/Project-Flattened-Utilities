@@ -34,12 +34,14 @@ public class Pfu {
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
+        // Register ourselves for server and other game events we are interested in
+        MinecraftForge.EVENT_BUS.register(this);
+
         // Register custom items
         ModItems.register(modEventBus);
 
         // Register custom blocks
         ModBlocks.register(modEventBus);
-
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
@@ -56,15 +58,7 @@ public class Pfu {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        // Some common setup code
-        //LOGGER.info("HELLO FROM COMMON SETUP");
-        //LOGGER.info("DIRT BLOCK >> {}", ForgeRegistries.BLOCKS.getKey(Blocks.DIRT));
 
-        //if (Config.logDirtBlock) LOGGER.info("DIRT BLOCK >> {}", ForgeRegistries.BLOCKS.getKey(Blocks.DIRT));
-
-        //LOGGER.info(Config.magicNumberIntroduction + Config.magicNumber);
-
-       // Config.items.forEach((item) -> LOGGER.info("ITEM >> {}", item.toString()));
     }
 
     // Add the example block item to the building blocks tab
@@ -88,8 +82,6 @@ public class Pfu {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             // Some client setup code
-            //LOGGER.info("HELLO FROM CLIENT SETUP");
-            //LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
         }
     }
 }
