@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
-@Mod(projectflattenedutilities.MODID)
+@Mod(Pfu.MOD_ID)
 public class SpawnHomeCommand {
     private static final Logger LOGGER = LogManager.getLogger();
     static String NBT_HOUSE_KEY = "pf_schematics:used";

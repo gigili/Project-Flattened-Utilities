@@ -1,0 +1,11 @@
+{
+  "type": "projectflattenedutilities:pfdim_type",
+  "generator": {
+    "type": "minecraft:noise",
+    "biome_source": {
+      "type": "minecraft:fixed",
+      "biome": "minecraft:plains"
+    },
+    "settings": "minecraft:floating_islands"
+  }
+}
