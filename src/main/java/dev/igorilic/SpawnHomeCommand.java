@@ -3,6 +3,7 @@ package dev.igorilic;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -28,7 +29,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.IntStream;
 
 @Mod(projectflattenedutilities.MOD_ID)
 public class SpawnHomeCommand {
@@ -68,9 +68,9 @@ public class SpawnHomeCommand {
                                 ))
                         )
                         .executes(ctx -> {
-                            int level = IntStream.iterate(4, i -> i >= 0, i -> i - 1).filter(i -> ctx.getSource().hasPermission(i)).findFirst().orElse(0);
+                            /*int level = IntStream.iterate(4, i -> i >= 0, i -> i - 1).filter(i -> ctx.getSource().hasPermission(i)).findFirst().orElse(0);
                             ctx.getSource().sendSuccess(() ->
-                                    Component.literal("Your permission level is: " + level), false);
+                                    Component.literal("Your permission level is: " + level), false);*/
 
                             return new SpawnHomeCommand().clearHouseNBT(
                                     ctx,
@@ -88,7 +88,8 @@ public class SpawnHomeCommand {
         if (tag.getBoolean(NBT_HOUSE_KEY)) {
             tag.remove(NBT_HOUSE_KEY);
         }
-        player.sendSystemMessage(Component.literal("You can now place a new house!"));
+        player.sendSystemMessage(Component.translatable("commands.projectflattenedutilities.clear_house_success").plainCopy()
+                .withStyle(ChatFormatting.GREEN));
 
         return 1;
     }
@@ -103,12 +104,20 @@ public class SpawnHomeCommand {
             boolean isAllowed = allowedUUIDs.isEmpty() || allowedUUIDs.contains(uuid.toString());
 
             if (!isAllowed) {
-                player.sendSystemMessage(Component.literal("You are not allowed to use this command."));
+                player.sendSystemMessage(
+                        Component.translatable("commands.projectflattenedutilities.not_allowed_to_use_command")
+                                .plainCopy()
+                                .withStyle(ChatFormatting.RED)
+                );
                 return 0;
             }
 
             if (tag.getBoolean(NBT_HOUSE_KEY)) {
-                player.sendSystemMessage(Component.literal("You've already spawned your house!"));
+                player.sendSystemMessage(
+                        Component.translatable("commands.projectflattenedutilities.house_already_spawned_in")
+                                .plainCopy()
+                                .withStyle(ChatFormatting.YELLOW)
+                );
                 return 0;
             }
 
@@ -117,7 +126,11 @@ public class SpawnHomeCommand {
 
             File structureFile = new File(FMLPaths.CONFIGDIR.get().toFile(), "pf_schematics/" + filename + ".nbt");
             if (!structureFile.exists()) {
-                player.sendSystemMessage(Component.literal("File not found: " + structureFile.getAbsolutePath()));
+                player.sendSystemMessage(
+                        Component.translatable("commands.projectflattenedutilities.file_not_found", structureFile.getAbsolutePath())
+                                .plainCopy()
+                                .withStyle(ChatFormatting.RED)
+                );
                 return 0;
             }
 
@@ -141,7 +154,11 @@ public class SpawnHomeCommand {
                         String id = block.builtInRegistryHolder().key().location().getPath();
 
                         if (!id.equals("air") && !id.equals("grass_block") && !id.equals("dirt")) {
-                            player.sendSystemMessage(Component.literal("The area isn't clear for building — pick a more open spot."));
+                            player.sendSystemMessage(
+                                    Component.translatable("commands.projectflattenedutilities.area_not_clear_enough")
+                                            .plainCopy()
+                                            .withStyle(ChatFormatting.RED)
+                            );
                             return 0;
                         }
                     }
@@ -149,7 +166,11 @@ public class SpawnHomeCommand {
             }
 
             template.placeInWorld(level, pos, pos, settings, level.getRandom(), 2);
-            player.sendSystemMessage(Component.literal("Spawned " + filename + " at " + pos.toShortString()));
+            player.sendSystemMessage(
+                    Component.translatable("commands.projectflattenedutilities.house_spawned", filename, pos.toShortString())
+                            .plainCopy()
+                            .withStyle(ChatFormatting.GREEN)
+            );
 
             tag.putBoolean(NBT_HOUSE_KEY, true);
             player.getPersistentData().put(ServerPlayer.PERSISTED_NBT_TAG, tag);
@@ -157,7 +178,9 @@ public class SpawnHomeCommand {
             return 1;
         } catch (Exception e) {
             e.printStackTrace();
-            player.sendSystemMessage(Component.literal("Error: " + e.getClass().getSimpleName() + " - " + e.getMessage()));
+            player.sendSystemMessage(
+                    Component.translatable("commands.projectflattenedutilities.exception_error", e.getClass().getSimpleName(), e.getMessage())
+            );
             return 0;
         }
     }

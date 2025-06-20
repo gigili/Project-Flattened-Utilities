@@ -1,3 +1,14 @@
 {
-  "block.projectflattenedutilities.teleporter_block": "Teleporter"
+  "block.projectflattenedutilities.teleporter_block": "Teleporter",
+  "commands.projectflattenedutilities.clear_house_success": "You can now place a new house!",
+  "commands.projectflattenedutilities.not_allowed_to_use_command": "You are not allowed to use this command.",
+  "commands.projectflattenedutilities.house_already_spawned_in": "You've already spawned your house!",
+  "commands.projectflattenedutilities.file_not_found": "File not found: %s",
+  "commands.projectflattenedutilities.area_not_clear_enough": "The area isn't clear for building — pick a more open spot.",
+  "commands.projectflattenedutilities.house_spawned": "Spawned %s at %s",
+  "commands.projectflattenedutilities.exception_error": "Error: %s - %s",
+  "tooltip.projectflattenedutilities.teleporter_block_required_item": "You need to hold a %s in your hand to teleport",
+  "tooltip.projectflattenedutilities.teleporter_block_consumes_item": "WARNING: Teleporting will consume the required item",
+  "messages.projectflattenedutilities.cant_find_required_item": "Can't find the specified Item in config. Item required: %s. Is it a valid minecraft item name?",
+  "messages.projectflattenedutilities.item_required_but_not_specified": "Teleportation requires an item to be held, but the item wasn't specified in config"
 }

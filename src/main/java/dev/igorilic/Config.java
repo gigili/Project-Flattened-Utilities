@@ -15,6 +15,7 @@ public class Config {
 
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> SPAWN_HOUSE_WHITELIST;
     public static final ForgeConfigSpec.BooleanValue REQUIRES_ITEM_TO_TELEPORT;
+    public static final ForgeConfigSpec.BooleanValue CONSUME_ITEM_TO_TELEPORT;
     public static final ForgeConfigSpec.ConfigValue<String> REQUIRED_ITEM_TO_TELEPORT;
 
     static {
@@ -34,9 +35,17 @@ public class Config {
                             }
                         });
 
+        BUILDER.pop();
+
+        BUILDER.push("Settings");
+
         REQUIRES_ITEM_TO_TELEPORT = BUILDER
                 .comment("If a player needs to hold an item in order to use the Teleporter")
                 .define("requireItemToTeleport", false);
+
+        CONSUME_ITEM_TO_TELEPORT = BUILDER
+                .comment("If the required item gets consumed when teleporting")
+                .define("consumeItemToTeleport", false);
 
         REQUIRED_ITEM_TO_TELEPORT = BUILDER
                 .comment("Item that needs to be held in order for the teleporter to work")
