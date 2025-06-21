@@ -1,5 +1,6 @@
 package dev.igorilic.worldgen.dimension;
 
+import com.mojang.datafixers.util.Pair;
 import dev.igorilic.projectflattenedutilities;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
@@ -9,15 +10,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.Biomes;
-import net.minecraft.world.level.biome.FixedBiomeSource;
+import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 
+import java.util.List;
 import java.util.OptionalLong;
 
 public class ModDimensions {
@@ -58,7 +58,25 @@ public class ModDimensions {
                 noiseGenSettings.getOrThrow(NoiseGeneratorSettings.FLOATING_ISLANDS)
         );
 
-        LevelStem stem = new LevelStem(dimTypes.getOrThrow(ModDimensions.PF_DIM_TYPE), wrappedChunkGenerator);
+        NoiseBasedChunkGenerator noiseBasedChunkGenerator = new NoiseBasedChunkGenerator(
+                MultiNoiseBiomeSource.createFromList(
+                        new Climate.ParameterList<>(
+                                List.of(
+                                        Pair.of(Climate.parameters(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F), biomeRegistry.getOrThrow(Biomes.PLAINS)),
+                                        Pair.of(Climate.parameters(0.1F, 0.1F, 0.0F, 0.2F, 0.0F, 0.0F, 0.0F), biomeRegistry.getOrThrow(Biomes.DARK_FOREST)),
+                                        Pair.of(Climate.parameters(0.2F, 0.1F, 0.0F, 0.2F, 0.0F, 0.0F, 0.0F), biomeRegistry.getOrThrow(Biomes.SUNFLOWER_PLAINS)),
+                                        Pair.of(Climate.parameters(0.1F, 0.1F, 0.0F, 0.2F, 0.0F, 0.0F, 0.0F), biomeRegistry.getOrThrow(Biomes.GROVE)),
+                                        Pair.of(Climate.parameters(0.1F, 0.1F, 0.0F, 0.2F, 0.0F, 0.0F, 0.0F), biomeRegistry.getOrThrow(Biomes.CHERRY_GROVE)),
+                                        Pair.of(Climate.parameters(0.2F, 0.05F, 0.0F, 0.1F, 0.0F, 0.0F, 0.0F), biomeRegistry.getOrThrow(Biomes.SWAMP)),
+                                        Pair.of(Climate.parameters(0.2F, 0.09F, 0.0F, 0.1F, 0.0F, 0.0F, 0.0F), biomeRegistry.getOrThrow(Biomes.MANGROVE_SWAMP)),
+                                        Pair.of(Climate.parameters(0.1F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.05F), biomeRegistry.getOrThrow(Biomes.STONY_PEAKS)),
+                                        Pair.of(Climate.parameters(0.095F, 0.01F, 0.0F, 0.0F, 0.0F, 0.0F, 0.05F), biomeRegistry.getOrThrow(Biomes.FROZEN_PEAKS)),
+                                        Pair.of(Climate.parameters(0.01F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.01F), biomeRegistry.getOrThrow(Biomes.DEEP_FROZEN_OCEAN))
+                                )
+                        )
+                ), noiseGenSettings.getOrThrow(NoiseGeneratorSettings.FLOATING_ISLANDS));
+
+        LevelStem stem = new LevelStem(dimTypes.getOrThrow(ModDimensions.PF_DIM_TYPE), noiseBasedChunkGenerator);
 
         context.register(PFDIM_KEY, stem);
     }
