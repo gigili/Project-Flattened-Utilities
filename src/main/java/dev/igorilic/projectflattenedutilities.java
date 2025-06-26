@@ -3,6 +3,7 @@ package dev.igorilic;
 import com.mojang.logging.LogUtils;
 import dev.igorilic.block.ModBlocks;
 import dev.igorilic.item.ModItems;
+import dev.igorilic.worldgen.ModPlatformSpawner;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -45,6 +46,8 @@ public class projectflattenedutilities {
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
+
+        MinecraftForge.EVENT_BUS.register(ModPlatformSpawner.class);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);

@@ -10,7 +10,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.*;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.biome.Climate;
+import net.minecraft.world.level.biome.MultiNoiseBiomeSource;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
@@ -25,9 +28,12 @@ public class ModDimensions {
             ResourceLocation.fromNamespaceAndPath(projectflattenedutilities.MOD_ID, "pfdim"));
     public static final ResourceKey<Level> PFDIM_LEVEL_KEY = ResourceKey.create(Registries.DIMENSION,
             ResourceLocation.fromNamespaceAndPath(projectflattenedutilities.MOD_ID, "pfdim"));
+    public static final ResourceKey<Level> PFDIM_VOID_LEVEL_KEY = ResourceKey.create(Registries.DIMENSION,
+            ResourceLocation.fromNamespaceAndPath(projectflattenedutilities.MOD_ID, "void"));
     public static final ResourceKey<DimensionType> PF_DIM_TYPE = ResourceKey.create(Registries.DIMENSION_TYPE,
-            ResourceLocation.fromNamespaceAndPath(projectflattenedutilities.MOD_ID, "pfdim_type"));
-
+            ResourceLocation.fromNamespaceAndPath(projectflattenedutilities.MOD_ID, "pfdim"));
+    public static final ResourceKey<NoiseGeneratorSettings> PF_NOISE = ResourceKey.create(Registries.NOISE_SETTINGS,
+            ResourceLocation.fromNamespaceAndPath(projectflattenedutilities.MOD_ID, "pfdim"));
 
     public static void bootstrapType(BootstapContext<DimensionType> context) {
         context.register(PF_DIM_TYPE, new DimensionType(
@@ -53,10 +59,10 @@ public class ModDimensions {
         HolderGetter<DimensionType> dimTypes = context.lookup(Registries.DIMENSION_TYPE);
         HolderGetter<NoiseGeneratorSettings> noiseGenSettings = context.lookup(Registries.NOISE_SETTINGS);
 
-        NoiseBasedChunkGenerator wrappedChunkGenerator = new NoiseBasedChunkGenerator(
+        /*NoiseBasedChunkGenerator wrappedChunkGenerator = new NoiseBasedChunkGenerator(
                 new FixedBiomeSource(biomeRegistry.getOrThrow(Biomes.PLAINS)),
-                noiseGenSettings.getOrThrow(NoiseGeneratorSettings.FLOATING_ISLANDS)
-        );
+                noiseGenSettings.getOrThrow(PF_NOISE)
+        );*/
 
         NoiseBasedChunkGenerator noiseBasedChunkGenerator = new NoiseBasedChunkGenerator(
                 MultiNoiseBiomeSource.createFromList(
@@ -77,6 +83,12 @@ public class ModDimensions {
                 ), noiseGenSettings.getOrThrow(NoiseGeneratorSettings.FLOATING_ISLANDS));
 
         LevelStem stem = new LevelStem(dimTypes.getOrThrow(ModDimensions.PF_DIM_TYPE), noiseBasedChunkGenerator);
+
+        /*NoiseBasedChunkGenerator wrappedChunkGenerator = new NoiseBasedChunkGenerator(
+                new FixedBiomeSource(biomeRegistry.getOrThrow(Biomes.PLAINS)),
+                noiseGenSettings.getOrThrow(PF_NOISE)
+        );
+        LevelStem stem = new LevelStem(dimTypes.getOrThrow(PF_DIM_TYPE), wrappedChunkGenerator);*/
 
         context.register(PFDIM_KEY, stem);
     }

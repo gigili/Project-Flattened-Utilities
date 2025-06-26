@@ -121,7 +121,7 @@ public class TeleporterBlock extends Block {
     private void handleTeleport(Entity player, BlockPos pPos) {
         if (player.level() instanceof ServerLevel serverLevel) {
             MinecraftServer minecraftserver = serverLevel.getServer();
-            ResourceKey<Level> resourcekey = player.level().dimension() == ModDimensions.PFDIM_LEVEL_KEY ? Level.OVERWORLD : ModDimensions.PFDIM_LEVEL_KEY;
+            ResourceKey<Level> resourcekey = player.level().dimension() == ModDimensions.PFDIM_LEVEL_KEY ? ModDimensions.PFDIM_VOID_LEVEL_KEY : ModDimensions.PFDIM_LEVEL_KEY;
 
             ServerLevel portalDimension = minecraftserver.getLevel(resourcekey);
             if (portalDimension != null && !player.isPassenger()) {
