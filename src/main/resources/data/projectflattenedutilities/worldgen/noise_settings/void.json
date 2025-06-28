@@ -128,5 +128,7 @@
         }
       }
     ]
-  }
+  },
+  "structures": {},
+  "generate_features": false
 }

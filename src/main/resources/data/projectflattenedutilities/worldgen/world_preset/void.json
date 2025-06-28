@@ -12,14 +12,12 @@
           "biome": "minecraft:plains",
           "features": false,
           "lakes": false,
-          "structures": false,
           "layers": [
             {
               "block": "minecraft:air",
               "height": 1
             }
-          ],
-          "structure_overrides": []
+          ]
         }
       }
     },
