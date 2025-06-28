@@ -30,15 +30,15 @@ public class ModTeleporter implements ITeleporter {
         BlockPos destinationPos = new BlockPos(thisPos.getX(), estimatedY, thisPos.getZ());
         BlockPos ground = findNearestValidGround(destinationWorld, destinationPos);
 
-        LOGGER.info("Ground found at {}", ground);
+        LOGGER.info("[PFU] Ground found at {}", ground);
         boolean doSetBlock = true;
         for (BlockPos checkPos : BlockPos.betweenClosed(
                 ground.below(5).west(50).north(50),  // min corner
                 ground.above(15).east(50).south(50)  // max corner
         )) {
-            //LOGGER.info("Check pos {}", checkPos);
+            //LOGGER.info("[PFU] Check pos {}", checkPos);
             if (destinationWorld.getBlockState(checkPos).getBlock() instanceof TeleporterBlock) {
-                LOGGER.info("Found teleporter at {}", checkPos);
+                LOGGER.info("[PFU] Found teleporter at {}", checkPos);
                 ground = checkPos;
                 doSetBlock = false;
                 break;
@@ -46,7 +46,7 @@ public class ModTeleporter implements ITeleporter {
         }
 
         if (doSetBlock) {
-            LOGGER.info("Placing teleporter at {}", ground);
+            LOGGER.info("[PFU] Placing teleporter at {}", ground);
             destinationWorld.setBlock(ground, ModBlocks.TELEPORTER_BLOCK.get().defaultBlockState(), 3);
         }
 
@@ -59,7 +59,7 @@ public class ModTeleporter implements ITeleporter {
 
         entity.teleportTo(spawnPos.x, spawnPos.y, spawnPos.z);
 
-        LOGGER.info("Final entity position: {}", entity.position());
+        LOGGER.info("[PFU] Final entity position: {}", entity.position());
         return entity;
     }
 
@@ -68,10 +68,16 @@ public class ModTeleporter implements ITeleporter {
         int minY = world.getMinBuildHeight();
         int maxY = world.getMaxBuildHeight();
 
-        LOGGER.info("minY: {}", minY);
-        LOGGER.info("maxY: {}", maxY);
+        boolean isOverworld = false; // world.dimension() == ServerLevel.OVERWORLD; Disabled this for now
 
-        for (int y = minY; y <= maxY; y++) {
+        LOGGER.info("[PFU] minY: {}", minY);
+        LOGGER.info("[PFU] maxY: {}", maxY);
+
+        int startY = isOverworld ? maxY : minY;
+        int endY = isOverworld ? minY : maxY;
+        int stepY = isOverworld ? -1 : 1;
+
+        for (int y = startY; isOverworld ? y >= endY : y <= endY; y += stepY) {
             for (int xOffset = -horizontalRange; xOffset <= horizontalRange; xOffset++) {
                 for (int zOffset = -horizontalRange; zOffset <= horizontalRange; zOffset++) {
                     BlockPos checkPos = new BlockPos(center.getX() + xOffset, y, center.getZ() + zOffset);

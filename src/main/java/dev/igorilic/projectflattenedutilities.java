@@ -3,6 +3,7 @@ package dev.igorilic;
 import com.mojang.logging.LogUtils;
 import dev.igorilic.block.ModBlocks;
 import dev.igorilic.item.ModItems;
+import dev.igorilic.worldgen.ModPlatformSpawner;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -46,6 +47,10 @@ public class projectflattenedutilities {
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
+        MinecraftForge.EVENT_BUS.register(ModPlatformSpawner.class);
+
+        MinecraftForge.EVENT_BUS.register(SleepSkipper.class);
+
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
 
@@ -63,7 +68,7 @@ public class projectflattenedutilities {
 
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
-        if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
+        if (event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
             event.accept(ModBlocks.TELEPORTER_BLOCK);
         }
     }
@@ -72,7 +77,7 @@ public class projectflattenedutilities {
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
         // Do something when the server starts
-        LOGGER.info("ProjectFlattenedUtilities server starting");
+        LOGGER.info("[PFU] ProjectFlattenedUtilities server starting");
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
@@ -81,7 +86,7 @@ public class projectflattenedutilities {
 
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-            LOGGER.info("ProjectFlattenedUtilities client starting");
+            LOGGER.info("[PFU] ProjectFlattenedUtilities client starting");
         }
     }
 }

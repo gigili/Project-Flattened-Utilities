@@ -10,5 +10,7 @@
   "tooltip.projectflattenedutilities.teleporter_block_required_item": "You need to hold a %s in your hand to teleport",
   "tooltip.projectflattenedutilities.teleporter_block_consumes_item": "WARNING: Teleporting will consume the required item",
   "messages.projectflattenedutilities.cant_find_required_item": "Can't find the specified Item in config. Item required: %s. Is it a valid minecraft item name?",
-  "messages.projectflattenedutilities.item_required_but_not_specified": "Teleportation requires an item to be held, but the item wasn't specified in config"
+  "messages.projectflattenedutilities.item_required_but_not_specified": "Teleportation requires an item to be held, but the item wasn't specified in config",
+  "dimension.projectflattenedutilities.void": "The Void",
+  "generator.projectflattenedutilities.void": "The Void"
 }

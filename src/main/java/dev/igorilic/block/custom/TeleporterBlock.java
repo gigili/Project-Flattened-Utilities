@@ -35,9 +35,6 @@ import java.util.List;
 public class TeleporterBlock extends Block {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private boolean requiresItem = false;
-    private Item requiredItem = null;
-
     public TeleporterBlock(Properties pProperties) {
         super(pProperties);
     }
@@ -48,49 +45,16 @@ public class TeleporterBlock extends Block {
             return InteractionResult.CONSUME;
         }
 
-        // Check config for item requirement
         if (Config.REQUIRES_ITEM_TO_TELEPORT.get()) {
-            String requiredItemName = Config.REQUIRED_ITEM_TO_TELEPORT.get();
-
-            if (requiredItemName.isEmpty()) {
-                LOGGER.error("REQUIRED_ITEM_TO_TELEPORT config is empty. Cannot teleport.");
-                if (!pLevel.isClientSide) {
-                    pPlayer.sendSystemMessage(
-                            Component.translatable("messages.projectflattenedutilities.item_required_but_not_specified")
-                                    .plainCopy()
-                                    .withStyle(ChatFormatting.RED)
-                    );
-                }
-                return InteractionResult.CONSUME;
-            }
-
-            ResourceLocation requiredItemId = ResourceLocation.tryParse(requiredItemName);
-            if (requiredItemId == null || !ForgeRegistries.ITEMS.containsKey(requiredItemId)) {
-                LOGGER.error("Invalid item ID in REQUIRED_ITEM_TO_TELEPORT: {}", requiredItemName);
-                if (!pLevel.isClientSide) {
-                    pPlayer.sendSystemMessage(
-                            Component.translatable("messages.projectflattenedutilities.cant_find_required_item", requiredItemName)
-                                    .plainCopy()
-                                    .withStyle(ChatFormatting.RED)
-                    );
-                }
-                return InteractionResult.CONSUME;
-            }
-
-            Item requiredItem = ForgeRegistries.ITEMS.getValue(requiredItemId);
-
+            Item requiredItem = getRequiredItem(pLevel, pPlayer);
             if (requiredItem == null) {
-                LOGGER.error("requiredItem IS NULL: {}", requiredItemName);
                 return InteractionResult.CONSUME;
             }
-
-            this.requiresItem = true;
-            this.requiredItem = requiredItem;
 
             boolean hasItemInHand = pPlayer.getMainHandItem().is(requiredItem) || pPlayer.getOffhandItem().is(requiredItem);
 
             if (!hasItemInHand) {
-                LOGGER.info("Player does not hold required item ({}) in either hand", requiredItemName);
+                LOGGER.info("[PFU] Player does not hold required item ({}) in either hand", requiredItem.getDescription().getString());
                 if (!pLevel.isClientSide) {
                     MutableComponent component = Component.translatable("tooltip.projectflattenedutilities.teleporter_block_required_item", requiredItem.getDescription().getString())
                             .plainCopy()
@@ -103,16 +67,17 @@ public class TeleporterBlock extends Block {
 
             if (Config.CONSUME_ITEM_TO_TELEPORT.get()) {
                 if (pPlayer.getMainHandItem().is(requiredItem)) {
-                    LOGGER.info("Consumed item {} in main hand", requiredItemName);
+                    LOGGER.info("[PFU] Consumed item {} in main hand", requiredItem.getDescription().getString());
                     pPlayer.getMainHandItem().shrink(1);
                 }
 
                 if (pPlayer.getOffhandItem().is(requiredItem)) {
-                    LOGGER.info("Consumed item {} in off hand", requiredItemName);
-                    pPlayer.getMainHandItem().shrink(1);
+                    LOGGER.info("[PFU] Consumed item {} in off hand", requiredItem.getDescription().getString());
+                    pPlayer.getOffhandItem().shrink(1);
                 }
             }
         }
+
 
         handleTeleport(pPlayer, pPos);
         return InteractionResult.SUCCESS;
@@ -121,11 +86,11 @@ public class TeleporterBlock extends Block {
     private void handleTeleport(Entity player, BlockPos pPos) {
         if (player.level() instanceof ServerLevel serverLevel) {
             MinecraftServer minecraftserver = serverLevel.getServer();
-            ResourceKey<Level> resourcekey = player.level().dimension() == ModDimensions.PFDIM_LEVEL_KEY ? Level.OVERWORLD : ModDimensions.PFDIM_LEVEL_KEY;
+            ResourceKey<Level> resourcekey = player.level().dimension() == ModDimensions.PFDIM_VOID_LEVEL_KEY ? Level.OVERWORLD : ModDimensions.PFDIM_VOID_LEVEL_KEY;
 
             ServerLevel portalDimension = minecraftserver.getLevel(resourcekey);
             if (portalDimension != null && !player.isPassenger()) {
-                if (resourcekey == ModDimensions.PFDIM_LEVEL_KEY) {
+                if (resourcekey == ModDimensions.PFDIM_VOID_LEVEL_KEY) {
                     player.changeDimension(portalDimension, new ModTeleporter(pPos, true));
                 } else {
                     player.changeDimension(portalDimension, new ModTeleporter(pPos, false));
@@ -134,11 +99,52 @@ public class TeleporterBlock extends Block {
         }
     }
 
+    private Item getRequiredItem(@Nullable Level pLevel, @Nullable Player pPlayer) {
+        String requiredItemName = Config.REQUIRED_ITEM_TO_TELEPORT.get();
+
+        if (Config.REQUIRES_ITEM_TO_TELEPORT.get() && requiredItemName.isEmpty()) {
+            LOGGER.error("[PFU] REQUIRED_ITEM_TO_TELEPORT config is empty. Cannot teleport.");
+            if (pPlayer != null && pLevel != null && !pLevel.isClientSide) {
+                pPlayer.sendSystemMessage(
+                        Component.translatable("messages.projectflattenedutilities.item_required_but_not_specified")
+                                .plainCopy()
+                                .withStyle(ChatFormatting.RED)
+                );
+            }
+            return null;
+        }
+
+        ResourceLocation requiredItemId = ResourceLocation.tryParse(requiredItemName);
+        if (requiredItemId == null || !ForgeRegistries.ITEMS.containsKey(requiredItemId)) {
+            LOGGER.error("[PFU] Invalid item ID in REQUIRED_ITEM_TO_TELEPORT: {}", requiredItemName);
+            if (pPlayer != null && pLevel != null && !pLevel.isClientSide) {
+                pPlayer.sendSystemMessage(
+                        Component.translatable("messages.projectflattenedutilities.cant_find_required_item", requiredItemName)
+                                .plainCopy()
+                                .withStyle(ChatFormatting.RED)
+                );
+            }
+            return null;
+        }
+
+        Item requiredItem = ForgeRegistries.ITEMS.getValue(requiredItemId);
+
+        if (requiredItem == null) {
+            LOGGER.error("[PFU] requiredItem IS NULL: {}", requiredItemName);
+            return null;
+        }
+
+        return requiredItem;
+    }
+
     @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable BlockGetter pLevel, List<Component> pTooltip, TooltipFlag pFlag) {
         super.appendHoverText(pStack, pLevel, pTooltip, pFlag);
-        if (this.requiresItem) {
+
+        if (Config.REQUIRES_ITEM_TO_TELEPORT.get()) {
+            Item requiredItem = getRequiredItem(null, null);
+
             MutableComponent component = Component.translatable("tooltip.projectflattenedutilities.teleporter_block_required_item", requiredItem.getDescription().getString())
                     .plainCopy()
                     .withStyle(ChatFormatting.YELLOW);
