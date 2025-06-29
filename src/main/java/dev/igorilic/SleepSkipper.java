@@ -1,44 +1,49 @@
 package dev.igorilic;
 
-import dev.igorilic.worldgen.dimension.ModDimensions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.List;
+import java.util.Objects;
 
 @Mod.EventBusSubscriber(modid = projectflattenedutilities.MOD_ID)
 public class SleepSkipper {
-    private static final ResourceLocation VOID_DIM = ResourceLocation.fromNamespaceAndPath(projectflattenedutilities.MOD_ID, "void");
-
     @SubscribeEvent
-    public static void onServerTick(TickEvent.ServerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
+    public static void onPlayerWakeUp(PlayerWakeUpEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
 
-        MinecraftServer server = event.getServer();
-        ServerLevel level = server.getLevel(ModDimensions.PFDIM_VOID_LEVEL_KEY);
+        ServerLevel level = (ServerLevel) player.level();
 
-        if (level == null || !level.dimension().location().equals(VOID_DIM)) return;
+        if (level.isClientSide()) return;
 
-        // Check if all players are sleeping
-        List<ServerPlayer> players = level.players();
-        if (players.isEmpty()) return;
+        // Get a list of dimension strings from config
+        List<String> configuredDims = List.of(projectflattenedutilities.MOD_ID + ":void");
 
-        boolean allSleeping = players.stream().allMatch(ServerPlayer::isSleeping);
+        // Convert strings to ResourceLocations and check if the current dimension matches any
+        boolean isConfiguredDim = configuredDims.stream()
+                .map(ResourceLocation::tryParse)
+                .filter(Objects::nonNull)
+                .anyMatch(dim -> dim.equals(level.dimension().location()));
 
-        if (allSleeping) {
-            String command = "time set day";
+        if (!isConfiguredDim) return;
 
-            server.getCommands().performPrefixedCommand(
-                    server.createCommandSourceStack()
-                            .withLevel(level)
-                            .withSuppressedOutput(),
-                    command
-            );
-        }
+        MinecraftServer server = player.server;
+
+        long currentTime = level.getDayTime();
+        long newTime = ((currentTime / 24000) + 1) * 24000;
+
+        String command = "time set " + newTime;
+
+        server.getCommands().performPrefixedCommand(
+                server.createCommandSourceStack()
+                        .withLevel(level)
+                        .withSuppressedOutput(),
+                command
+        );
     }
 }

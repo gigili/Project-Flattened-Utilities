@@ -20,6 +20,7 @@ import java.util.UUID;
 public class ModPlatformSpawner {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final ResourceLocation JOINED_PLATFORM_TAG = ResourceLocation.fromNamespaceAndPath(projectflattenedutilities.MOD_ID, "spawned_platform");
+    private static final ResourceLocation PLATFORM_CORDS_TAG = ResourceLocation.fromNamespaceAndPath(projectflattenedutilities.MOD_ID, "platform_cords");
 
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
@@ -34,15 +35,7 @@ public class ModPlatformSpawner {
 
         if (targetDim == null) return;
 
-        CompoundTag persistentData = player.getPersistentData();
-        CompoundTag forgeData = persistentData.getCompound(ServerPlayer.PERSISTED_NBT_TAG);
-
-        if (!forgeData.contains(JOINED_PLATFORM_TAG.toString())) {
-            forgeData.putBoolean(JOINED_PLATFORM_TAG.toString(), true);
-            persistentData.put(ServerPlayer.PERSISTED_NBT_TAG, forgeData);
-
-            teleportAndSpawnPlatform(player, targetDim, true);
-        }
+        teleportAndSpawnPlatform(player, targetDim, true);
     }
 
     @SubscribeEvent
@@ -53,24 +46,23 @@ public class ModPlatformSpawner {
         ServerLevel targetDim = player.server.getLevel(ModDimensions.PFDIM_VOID_LEVEL_KEY);
         if (targetDim == null) return;
 
-        CompoundTag persistentData = player.getPersistentData();
-        CompoundTag forgeData = persistentData.getCompound(ServerPlayer.PERSISTED_NBT_TAG);
-
-        if (!forgeData.contains(JOINED_PLATFORM_TAG.toString())) {
-            forgeData.putBoolean(JOINED_PLATFORM_TAG.toString(), true);
-            persistentData.put(ServerPlayer.PERSISTED_NBT_TAG, forgeData);
-
-            teleportAndSpawnPlatform(player, targetDim, false);
-        }
+        teleportAndSpawnPlatform(player, targetDim, false);
     }
 
     private static void teleportAndSpawnPlatform(ServerPlayer player, ServerLevel dimension, boolean forceSpawn) {
-        BlockPos platformPos = forceSpawn ? getPlatformPositionForPlayer(player) : new BlockPos(player.getOnPos().getX(), 64, player.getOnPos().getZ());
+        BlockPos platformPos = getPlatformPositionForPlayer(player); // : new BlockPos(player.getOnPos().getX(), 64, player.getOnPos().getZ());
         StructureTemplate template = dimension.getServer().getStructureManager()
                 .get(ResourceLocation.fromNamespaceAndPath(projectflattenedutilities.MOD_ID, "start_platform"))
                 .orElse(null);
 
-        if (template != null) {
+
+        CompoundTag persistentData = player.getPersistentData();
+        CompoundTag forgeData = persistentData.getCompound(ServerPlayer.PERSISTED_NBT_TAG);
+
+        if (template != null && !forgeData.contains(JOINED_PLATFORM_TAG.toString())) {
+            forgeData.putBoolean(JOINED_PLATFORM_TAG.toString(), true);
+            persistentData.put(ServerPlayer.PERSISTED_NBT_TAG, forgeData);
+
             template.placeInWorld(
                     dimension,
                     platformPos,
@@ -86,7 +78,6 @@ public class ModPlatformSpawner {
         if (forceSpawn) {
             player.setRespawnPosition(ModDimensions.PFDIM_VOID_LEVEL_KEY, spawnPos, 0, true, false);
         } else {
-
             BlockPos oldTeleporterPos = new BlockPos(spawnPos.getX(), -64, spawnPos.getZ());
             BlockPos newTeleporterPos = new BlockPos(spawnPos.getX(), 67, spawnPos.getZ());
 
