@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 123456,
+    "separation": 5,
+    "spacing": 10
+  },
+  "structures": [
+    {
+      "structure": "projectflattenedutilities:start_platform",
+      "weight": 1
+    }
+  ]
+}

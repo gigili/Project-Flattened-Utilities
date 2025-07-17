@@ -1,15 +1,16 @@
 {
-  "name": "projectflattenedutilities:start_platform_pool",
-  "fallback": "minecraft:empty",
   "elements": [
     {
       "element": {
         "element_type": "minecraft:single_pool_element",
         "location": "projectflattenedutilities:start_platform",
-        "processors": "minecraft:empty",
+        "processors": {
+          "processors": []
+        },
         "projection": "rigid"
       },
       "weight": 1
     }
-  ]
+  ],
+  "fallback": "minecraft:empty"
 }

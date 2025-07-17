@@ -2,11 +2,10 @@
   "type": "projectflattenedutilities:void",
   "generator": {
     "type": "minecraft:noise",
-    "settings": "projectflattenedutilities:void",
     "biome_source": {
       "type": "minecraft:fixed",
-      "biome": "minecraft:plains"
+      "biome": "minecraft:the_void"
     },
-    "generate_features": false
+    "settings": "projectflattenedutilities:void"
   }
 }

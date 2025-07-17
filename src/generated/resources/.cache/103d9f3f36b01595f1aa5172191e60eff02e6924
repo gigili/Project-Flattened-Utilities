@@ -1,1 +1,8 @@
-// 1.20.1	2025-06-28T14:52:59.335424647	Registries
+// 1.20.1	2025-07-17T22:06:06.496299269	Registries
+a3eb0dd9dc97bec32144e069d0200e3e2b070e85 data/projectflattenedutilities/dimension/void.json
+d8d014b60fb2d97701f5d6443fe7aae086b40678 data/projectflattenedutilities/dimension_type/void.json
+f91506be38148a4a7b7fd576246798933733eebf data/projectflattenedutilities/worldgen/noise_settings/void.json
+7c97d01ecd3725b65902f5518b8196347152f39a data/projectflattenedutilities/worldgen/structure/start_platform.json
+c36428709fcc48bdcc0e4f9488f11b1dc5dbdb17 data/projectflattenedutilities/worldgen/structure_set/start_platform.json
+7cae7162ed9ed9a31c1f3b2ba2a9ae2c875aff3b data/projectflattenedutilities/worldgen/template_pool/start_platform_pool.json
+a5f466d0a4e5b1a2e79a5bbff2ffdf798f6d73fd data/projectflattenedutilities/worldgen/world_preset/void.json

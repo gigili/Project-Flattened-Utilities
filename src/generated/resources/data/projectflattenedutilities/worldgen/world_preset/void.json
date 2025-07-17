@@ -1,15 +1,11 @@
 {
   "dimensions": {
     "minecraft:overworld": {
-      "type": "projectflattenedutilities:void",
+      "type": "minecraft:overworld",
       "generator": {
         "type": "minecraft:flat",
-        "biome_source": {
-          "type": "minecraft:fixed",
-          "biome": "minecraft:plains"
-        },
         "settings": {
-          "biome": "minecraft:plains",
+          "biome": "minecraft:the_void",
           "features": false,
           "lakes": false,
           "layers": [
@@ -17,7 +13,8 @@
               "block": "minecraft:air",
               "height": 1
             }
-          ]
+          ],
+          "structure_overrides": "projectflattenedutilities:start_platform"
         }
       }
     },
