@@ -19,8 +19,7 @@ import java.util.UUID;
 
 public class ModPlatformSpawner {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final ResourceLocation JOINED_PLATFORM_TAG = ResourceLocation.fromNamespaceAndPath(projectflattenedutilities.MOD_ID, "spawned_platform");
-    private static final ResourceLocation PLATFORM_CORDS_TAG = ResourceLocation.fromNamespaceAndPath(projectflattenedutilities.MOD_ID, "platform_cords");
+    private static final ResourceLocation JOINED_PLATFORM_TAG = ResourceLocation.fromNamespaceAndPath(projectflattenedutilities.MOD_ID, "spawned_platform_v2");
 
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
